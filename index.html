@@ -1,0 +1,50 @@
+<script>
+    // Função para consumir a API /hello (GET)
+    document.getElementById('helloBtn').addEventListener('click', function() {
+        fetch('http://127.0.0.1:5000/hello')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('helloResult').innerHTML = `<div id="result">Resposta: ${data.message}</div>`;
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+        });
+    });
+
+    // Função para consumir a API /sum (POST)
+    document.getElementById('sumBtn').addEventListener('click', function() {
+        const num1 = document.getElementById('num1').value;
+        const num2 = document.getElementById('num2').value;
+
+        // Verifica se os campos não estão vazios
+        if (num1 === '' || num2 === '') {
+            alert('Por favor, insira os dois números.');
+            return;
+        }
+
+        fetch('http://127.0.0.1:5000/sum', {
+            method: 'POST',  // Certifique-se de que o método é POST
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                num1: parseFloat(num1),  // Converte o valor para número
+                num2: parseFloat(num2)   // Converte o valor para número
+            })
+        })
+        .then(response => {
+            // Verifica se a resposta é bem-sucedida (status 200)
+            if (!response.ok) {
+                throw new Error('Erro na requisição');
+            }
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById('sumResult').innerHTML = `<div id="result">Soma: ${data.sum}</div>`;
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            document.getElementById('sumResult').innerHTML = `<div id="result">Erro ao processar a soma.</div>`;
+        });
+    });
+</script>
